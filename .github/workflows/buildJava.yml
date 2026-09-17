@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Récupérer le code du dépôt
+      - name: Recup code depot
         uses: actions/checkout@v4
 
       - name: Config jdk21
@@ -18,9 +18,25 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
+      - name: cache pkg sonarqube
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: cache dep mvn
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Compil et test qualité avec sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.projectKey=$(echo ${{ github.repository }} | sed 's-/-_-')
+
