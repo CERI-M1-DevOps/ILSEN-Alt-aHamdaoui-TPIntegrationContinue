@@ -33,6 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+
       - name: Compil et test qualité avec sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
