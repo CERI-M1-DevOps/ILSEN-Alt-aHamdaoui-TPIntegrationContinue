@@ -114,7 +114,7 @@ public class ListeSimpleTest {
 
     @Test
     public void supprimeTousListeVide() {
-        listeATester.supprimePremier(1);
+        listeATester.supprimeTous(1);
         assertNull(listeATester.tete);
         assertEquals(0, listeATester.getSize());
     }
@@ -254,5 +254,97 @@ public class ListeSimpleTest {
         listeATester.echanger(r1, r2);
         System.out.println(listeATester);
         assertEquals(listeATester.toString(), "ListeSimple(Noeud(4), Noeud(2), Noeud(3), Noeud(1), Noeud(5))");
+    }
+
+    @Test
+    public void echangerMemeNoeud() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        Noeud r = listeATester.tete;
+        listeATester.echanger(r, r);
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void modifiePremierInexistant() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.modifiePremier(99, 4);
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void modifiePremierListeVide() {
+        listeATester.modifiePremier(1, 4);
+        assertEquals(0, listeATester.getSize());
+        assertNull(listeATester.tete);
+    }
+
+    @Test
+    public void modifieTousInexistant() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.modifieTous(99, 4);
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void modifieTousListeVide() {
+        listeATester.modifieTous(1, 4);
+        assertEquals(0, listeATester.getSize());
+        assertNull(listeATester.tete);
+    }
+
+    @Test
+    public void supprimePremierInexistant() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.supprimePremier(99);
+        assertEquals(2, listeATester.getSize());
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void supprimePremierInexistantUnElement() {
+        listeATester.ajout(1);
+        listeATester.supprimePremier(99);
+        assertEquals(1, listeATester.getSize());
+        assertEquals("ListeSimple(Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void supprimeTousInexistant() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.supprimeTous(99);
+        assertEquals(2, listeATester.getSize());
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void getPrecedentTest() {
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.ajout(3);
+        Noeud n1 = listeATester.tete.getSuivant().getSuivant();
+        assertEquals(listeATester.tete.getSuivant(), listeATester.getPrecedent(n1));
+    }
+
+    @Test
+    public void inverserListeUnElement() {
+        listeATester.ajout(1);
+        listeATester.inverser();
+        assertEquals("ListeSimple(Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void toStringListeVide() {
+        assertEquals("ListeSimple()", listeATester.toString());
+    }
+
+    @Test
+    public void toStringUnElement() {
+        listeATester.ajout(1);
+        assertEquals("ListeSimple(Noeud(1))", listeATester.toString());
     }
 }
