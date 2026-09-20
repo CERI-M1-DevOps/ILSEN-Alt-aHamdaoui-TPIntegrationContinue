@@ -4,10 +4,13 @@ on:
   pull_request:
     types: [ closed ]
     branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   deploy-doc:
-    if: github.event.pull_request.merged == true
+    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,7 +26,12 @@ jobs:
           distribution: 'corretto'
 
       - name: Generation de la Javadoc
-        run: mvn -B javadoc:javadoc
+        run: |
+          mvn -B javadoc:javadoc
+          if [ -d "target/reports/apidocs" ] && [ ! -d "target/site/apidocs" ]; then
+            mkdir -p target/site
+            cp -r target/reports/apidocs target/site/apidocs
+          fi
 
       - name: Deploiement GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
